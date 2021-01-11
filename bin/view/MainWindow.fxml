@@ -25,7 +25,7 @@
                <top>
                   <ButtonBar BorderPane.alignment="CENTER">
                     <buttons>
-                      <Button fx:id="btnConnect" mnemonicParsing="false" onAction="#connect" text="Connect" />
+                      <Button fx:id="btnConnect" mnemonicParsing="false" onAction="#onConnectButtonPressed" text="Connect" />
                         <Button mnemonicParsing="false" onAction="#loadData" text="Load Data" />
                       <Button fx:id="btnCalc" mnemonicParsing="false" onAction="#calculate" prefHeight="25.0" prefWidth="105.0" text="Calculate Path" />
                     </buttons>

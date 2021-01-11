@@ -1,7 +1,13 @@
 package view;
 
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 public class MainWindowController implements Observer {
 	
@@ -17,8 +23,20 @@ public class MainWindowController implements Observer {
 		
 	}
 	
-	public void connect() {
-		System.out.println("Connect test");
+	public void onConnectButtonPressed() {
+		try {
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ConnectWindow.fxml"));
+			AnchorPane window = (AnchorPane) fxmlLoader.load();
+			ConnectWindowController controller = fxmlLoader.getController();
+			Scene scene = new Scene(window);
+			Stage stage = new Stage();
+			stage.setScene(scene);
+			stage.show();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void loadData() {
