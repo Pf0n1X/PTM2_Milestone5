@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -11,9 +12,14 @@ import javafx.stage.Stage;
 
 public class MainWindowController implements Observer {
 	
+	// Data Members
+	@FXML
+	Map map;
+	
 	// Constructors
 	public MainWindowController() {
-		// TODO Auto-generated constructor stub
+		this.map = new Map();
+		this.map.paintMap();
 	}
 	
 	// Methods
@@ -40,7 +46,7 @@ public class MainWindowController implements Observer {
 	}
 	
 	public void loadData() {
-		
+		this.map.paintMap();
 	}
 	
 	public void calculate() {
