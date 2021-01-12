@@ -113,8 +113,22 @@ public class MainWindowController implements Observer {
 		
 	}
 	
-	public void calculate() {
-		
+	public void onCalculatePathButtonPressed() {
+		try {
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("CalculatePathWindow.fxml"));
+			AnchorPane window = (AnchorPane) fxmlLoader.load();
+			CalculatePathWindowController controller = fxmlLoader.getController();
+//			controller.setViewModel(this.ViewModel);
+			Scene scene = new Scene(window);
+			this.connectWindow = new Stage();
+			connectWindow.setScene(scene);
+			connectWindow.show();
+			
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void loadTextFile() throws IOException {
