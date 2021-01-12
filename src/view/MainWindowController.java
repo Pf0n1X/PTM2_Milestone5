@@ -19,6 +19,10 @@ public class MainWindowController implements Observer {
 	Label statlabel, airspeed, altitude;
 	
 	String na = "N/A";
+	// Data Members
+	@FXML
+	Map map;
+	
 	// Constructors
 	public MainWindowController() {
 		// TODO Auto-generated constructor stub

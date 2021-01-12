@@ -17,6 +17,8 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
+<?import view.Map?>
+
 <BorderPane prefHeight="300" prefWidth="950" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MainWindowController">
    <left>
       <VBox prefHeight="300" prefWidth="300" BorderPane.alignment="CENTER">
@@ -35,7 +37,7 @@
                   </ButtonBar>
                </top>
                <center>
-                 
+                 <Map fx:id="map" width="300.0" height="300.0" BorderPane.alignment="CENTER"/>
                </center>
             </BorderPane>
          </children>
