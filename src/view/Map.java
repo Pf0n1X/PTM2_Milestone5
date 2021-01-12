@@ -2,12 +2,14 @@ package view;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Scanner;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 public class Map extends Canvas {
 	
@@ -21,7 +23,10 @@ public class Map extends Canvas {
 	}
 	
 	// Methods
-	public void paintMap() {
+	public void paintMap(File csv) {
+		
+		getArrayFromFile(csv);
+		
 		GraphicsContext graphicsContext = getGraphicsContext2D();
 		Color color;
 		
@@ -54,6 +59,7 @@ public class Map extends Canvas {
 				graphicsContext.fillRect(j * sqrWidth, i * sqrHeight, sqrWidth, sqrHeight);
 				
 				// Type the text.
+				graphicsContext.setFont(new Font("TimesRoman", sqrHeight / 5));
 				graphicsContext.setFill(Color.BLACK);
 				graphicsContext.fillText(matrix[i][j] + "", (j + 0.5) * sqrWidth, (i + 0.5) * sqrHeight);
 			}
@@ -120,6 +126,13 @@ public class Map extends Canvas {
 			}
 			
 			scanner.close();
+			this.matrix = new double[lines.size()][lines.get(0).length()];
+			for (int i = 0; i < lines.size(); i ++) {
+				String line = lines.get(i);
+				double[] lineCells = Arrays.asList(line.split(",")).stream().mapToDouble(cell -> Double.parseDouble(cell)).toArray();
+				this.matrix[i] = lineCells;
+				System.out.println(lineCells.toString());
+			}
 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
