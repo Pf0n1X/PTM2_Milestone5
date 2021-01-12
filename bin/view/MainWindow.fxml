@@ -99,6 +99,22 @@
                   <Cursor fx:constant="DEFAULT" />
                </cursor>
             </Circle>
+            <Label layoutX="212.0" layoutY="14.0" prefHeight="17.0" prefWidth="60.0" text="Speed:">
+               <font>
+                  <Font size="10.0" />
+               </font></Label>
+            <Label fx:id="airspeed" layoutX="271.0" layoutY="14.0" text="0">
+               <font>
+                  <Font size="11.0" />
+               </font></Label>
+            <Label layoutX="212.0" layoutY="34.0" text="Altitude:">
+               <font>
+                  <Font size="11.0" />
+               </font></Label>
+            <Label fx:id="altitude" layoutX="271.0" layoutY="35.0" text="0">
+               <font>
+                  <Font size="11.0" />
+               </font></Label>
          </children>
       </AnchorPane>
    </right>

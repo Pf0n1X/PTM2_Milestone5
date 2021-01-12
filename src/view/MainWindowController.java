@@ -4,13 +4,21 @@ import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class MainWindowController implements Observer {
+	@FXML
+	RadioButton radioBtnManual, radioBtnAutopilot;
+	@FXML
+	Label statlabel, airspeed, altitude;
 	
+	String na = "N/A";
 	// Constructors
 	public MainWindowController() {
 		// TODO Auto-generated constructor stub
@@ -51,15 +59,32 @@ public class MainWindowController implements Observer {
 		
 	}
 	
+	public void clearAttributesLabels() {
+		this.airspeed.textProperty().unbind();
+		this.altitude.textProperty().unbind();
+		this.airspeed.setText(na);
+		this.altitude.setText(na);
+	}
+	
+	public void toggleManualPilot(){
+		if(this.radioBtnAutopilot.isSelected()) {
+			this.radioBtnAutopilot.setSelected(false);
+		}
+		this.radioBtnManual.setSelected(true);
+		this.statlabel.setText("Manual Controls Are ON");
+	}
+	
 	public void toggleAutoPilot() {
-		
+		if(this.radioBtnManual.isSelected()) {
+			this.radioBtnManual.setSelected(false);	
+			this.clearAttributesLabels();
+
+		}
+		this.radioBtnAutopilot.setSelected(true);
+		this.statlabel.setText("AutoPilot mode is ON");
 	}
 	
 	public void runCodeCommands() {
-		
-	}
-	
-	public void toggleManualPilot() {
 		
 	}
 	
