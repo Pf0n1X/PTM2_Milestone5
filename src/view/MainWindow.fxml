@@ -37,7 +37,7 @@
                   </ButtonBar>
                </top>
                <center>
-                 <Map fx:id="map" width="300.0" height="300.0" BorderPane.alignment="CENTER"/>
+                 <Map fx:id="map" onMouseClicked="#onMapClicked" width="300.0" height="300.0" BorderPane.alignment="CENTER"/>
                </center>
             </BorderPane>
          </children>

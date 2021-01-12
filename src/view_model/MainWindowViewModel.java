@@ -19,14 +19,15 @@ public class MainWindowViewModel extends Observable implements Observer {
 	public StringProperty autoPilotText;
 	public DoubleProperty throttle, rudder, alieron, elevator, flaps;
 	private volatile boolean isConnected = false;
-	public HashMap<String, StringProperty> stringPropertiesMap;
-	public HashMap<String, DoubleProperty> doublePropertiesMap;
+	private HashMap<String, StringProperty> stringProperties;
+	private HashMap<String, DoubleProperty> doubleProperties;
 	
-	
+	// Constant Members
 	public static final String AIRSPEED = "airspeed";
 	public static final String ALT = "alt";
 	public static final String LATITUDE = "lat";
 	public static final String LONGITUDE = "long";
+	
 	// Constructors
 	public MainWindowViewModel(Interpreter interpreter) {
 		this.interpreter = interpreter;
@@ -40,13 +41,13 @@ public class MainWindowViewModel extends Observable implements Observer {
 		this.elevator = new SimpleDoubleProperty();
 		this.flaps = new SimpleDoubleProperty();
 		
-		this.stringPropertiesMap = new HashMap<String, StringProperty>();
-		this.doublePropertiesMap = new HashMap<String, DoubleProperty>();
+		this.stringProperties= new HashMap<String, StringProperty>();
+		this.doubleProperties= new HashMap<String, DoubleProperty>();
 		
-		this.stringPropertiesMap.put(AIRSPEED, new SimpleStringProperty());
-		this.stringPropertiesMap.put(ALT, new SimpleStringProperty());
-		this.doublePropertiesMap.put(LATITUDE, new SimpleDoubleProperty());
-		this.doublePropertiesMap.put(LONGITUDE, new SimpleDoubleProperty());
+		this.stringProperties.put(AIRSPEED, new SimpleStringProperty());
+		this.stringProperties.put(ALT, new SimpleStringProperty());
+		this.doubleProperties.put(LATITUDE, new SimpleDoubleProperty());
+		this.doubleProperties.put(LONGITUDE, new SimpleDoubleProperty());
 	}
 
 	public void getAutoPilotText() {
@@ -100,11 +101,17 @@ public class MainWindowViewModel extends Observable implements Observer {
 	
 //	TODO
 	public void startTimerVals() {
+		
 	}
 	
 	public void setConnected(boolean isConnected) {
 		this.isConnected = isConnected;
 		this.startTimerVals();
+	}
+	
+	// Getters & Setters
+	public DoubleProperty getDoubleProperty(String key) {
+		return this.doubleProperties.get(key);
 	}
 
 }
