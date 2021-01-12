@@ -1,5 +1,10 @@
 package view;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.LinkedList;
+import java.util.Scanner;
+
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -99,5 +104,26 @@ public class Map extends Canvas {
 
 	public double getMaxVal() {
 		return maxVal;
+	}
+	
+	public void getArrayFromFile(File file) {
+		try {
+			Scanner scanner = new Scanner(file);
+			scanner.useDelimiter("\r\n");
+			
+			scanner.next();
+			scanner.next();
+			LinkedList<String> lines = new LinkedList<String>();
+			
+			while(scanner.hasNext()) {
+				lines.add(scanner.next());
+			}
+			
+			scanner.close();
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
