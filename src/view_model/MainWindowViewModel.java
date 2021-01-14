@@ -8,7 +8,6 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
-
 import interpreter.Interpreter;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -16,6 +15,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import view.MainWindowController;
 import view.Map;
+import math_expressions.SimulatorSymbolVariable;
 
 public class MainWindowViewModel extends Observable implements Observer {
 

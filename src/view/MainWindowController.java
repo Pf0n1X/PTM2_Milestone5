@@ -76,6 +76,7 @@ public class MainWindowController implements Observer {
 			AnchorPane window = (AnchorPane) fxmlLoader.load();
 			ConnectWindowController controller = fxmlLoader.getController();
 			controller.setViewModel(this.ViewModel);
+			controller.setMainWindow(this);
 			Scene scene = new Scene(window);
 			this.connectWindow = new Stage();
 			connectWindow.setScene(scene);

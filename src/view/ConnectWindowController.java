@@ -44,7 +44,7 @@ public class ConnectWindowController implements Observer  {
 				return;
 			}
 			if(connect(this.ip, this.port)) {
-				this.mainWindow.ViewModel.setConnected(true);
+				this.viewModel.setConnected(true);
 				this.mainWindow.closeConnectWindow();	
 			}
 			else lblStatus.setText("Connect Error");
@@ -69,11 +69,12 @@ public class ConnectWindowController implements Observer  {
 			this.viewModel.sendCommandToInterpreter("var rudder = bind \"/controls/flight/rudder\"");
 			this.viewModel.sendCommandToInterpreter("var aileron = bind \"/controls/flight/aileron\"");
 			this.viewModel.sendCommandToInterpreter("var elevator = bind \"/controls/flight/elevator\"");
-			this.viewModel.sendCommandToInterpreter("var flaps = bind \"/controls/flight/flaps\"");
 			this.viewModel.sendCommandToInterpreter("var airspeed = bind \"/instrumentation/airspeed-indicator/indicated-speed-kt\"");
-			this.viewModel.sendCommandToInterpreter("var alt      = bind \"/instrumentation/altimeter/indicated-altitude-ft\"");
-			this.viewModel.sendCommandToInterpreter("var lat      = bind \"/instrumentation/gps/indicated-latitude-deg\"");
-			this.viewModel.sendCommandToInterpreter("var long      = bind \"/instrumentation/gps/indicated-longitude-deg\"");
+			this.viewModel.sendCommandToInterpreter("var alt = bind \"/instrumentation/altimeter/indicated-altitude-ft\"");
+			this.viewModel.sendCommandToInterpreter("var pitch = bind \"/instrumentation/attitude-indicator/internal-pitch-deg\"");
+			this.viewModel.sendCommandToInterpreter("var roll = bind \"/instrumentation/attitude-indicator/indicated-roll-deg\"");
+			this.viewModel.sendCommandToInterpreter("var offset = bind \"/instrumentation/heading-indicator/offset-deg\"");
+
 			return true;
 		}
 		return false;

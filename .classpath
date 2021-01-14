@@ -11,7 +11,12 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Tomer/Downloads/PTM2_Milestone4 Our Solution/interpreter.jar">
+	<classpathentry kind="lib" path="C:/Users/Tomer/eclipse-workspace/PTM2_MS5/PTM1_Milestone3 Our Solution/PTM_projectTest.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Tomer/eclipse-workspace/PTM2_MS5/interpreter.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
@@ -52,11 +57,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/Tomer/eclipse-workspace/PTM2_MS5/openjfx-11.0.2_windows-x64_bin-sdk/javafx-sdk-11.0.2/lib/javafx-swt.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Tomer/eclipse-workspace/PTM2_MS5/PTM1_Milestone3 Our Solution/PTM_projectTest.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
