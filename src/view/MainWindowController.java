@@ -94,6 +94,9 @@ public class MainWindowController implements Observer {
 	
 	public void setViewModel(MainWindowViewModel ViewModel) {
 		this.ViewModel = ViewModel;
+		this.map.setViewModel(ViewModel);
+		this.ViewModel.setMainWindowController(this);
+		this.ViewModel.setMapView(this.map);
 		this.alieronVal = new SimpleDoubleProperty();
 		this.elevatorVal = new SimpleDoubleProperty();
 		this.flapsval = new SimpleDoubleProperty();
@@ -118,13 +121,11 @@ public class MainWindowController implements Observer {
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("CalculatePathWindow.fxml"));
 			AnchorPane window = (AnchorPane) fxmlLoader.load();
 			CalculatePathWindowController controller = fxmlLoader.getController();
-//			controller.setViewModel(this.ViewModel);
+			controller.setMainController(this);
 			Scene scene = new Scene(window);
 			this.connectWindow = new Stage();
 			connectWindow.setScene(scene);
 			connectWindow.show();
-			
-			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

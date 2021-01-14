@@ -4,6 +4,7 @@ module PTM2_MS5 {
 	requires javafx.graphics;
 	requires interpreter;
 	requires javafx.base;
+	requires PTM.projectTest;
 	
 	opens view to javafx.graphics, javafx.fxml;
 }
