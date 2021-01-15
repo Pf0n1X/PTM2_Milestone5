@@ -47,7 +47,8 @@ public class MainWindowController implements Observer {
 	private File csv;
 	MainWindowViewModel ViewModel;
 	DoubleProperty alieronVal, elevatorVal, flapsval;
-	Stage connectWindow;
+	private Stage connectWindow;
+	private Stage calculatePathWindow;
 	
 	String MCL = "Manual Controls locked! - To manualy control the aircraft you need to press the Manual Controls button first";
 	String APL = "Cannot Execute! = To use the AutoPilot option you need to press the AutoPilot mode Button first";
@@ -124,12 +125,19 @@ public class MainWindowController implements Observer {
 			CalculatePathWindowController controller = fxmlLoader.getController();
 			controller.setMainController(this);
 			Scene scene = new Scene(window);
-			this.connectWindow = new Stage();
-			connectWindow.setScene(scene);
-			connectWindow.show();
+			this.calculatePathWindow = new Stage();
+			this.calculatePathWindow.setScene(scene);
+			this.calculatePathWindow.show();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	public void closeCalculatePathWindow() {
+		if (this.calculatePathWindow != null) {
+			this.calculatePathWindow.close();
+			this.calculatePathWindow = null;
 		}
 	}
 	

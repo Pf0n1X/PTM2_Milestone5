@@ -1,5 +1,6 @@
 package view_model;
 
+import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -16,6 +17,7 @@ import javafx.beans.property.StringProperty;
 import view.MainWindowController;
 import view.Map;
 import math_expressions.SimulatorSymbolVariable;
+import model.MapModel;
 
 public class MainWindowViewModel extends Observable implements Observer {
 
@@ -37,6 +39,7 @@ public class MainWindowViewModel extends Observable implements Observer {
 	private HashMap<String, DoubleProperty> doubleProperties;
 	private MainWindowController mainWindowController;
 	private Map mapView;
+	private MapModel mapModel;
 	
 	// Constant Members
 	public static final String AIRSPEED = "airspeed";
@@ -70,6 +73,7 @@ public class MainWindowViewModel extends Observable implements Observer {
 		this.stringProperties.put(ALT, new SimpleStringProperty());
 		this.doubleProperties.put(LATITUDE, new SimpleDoubleProperty());
 		this.doubleProperties.put(LONGITUDE, new SimpleDoubleProperty());
+		this.mapModel = new MapModel();
 	}
 
 	public void getAutoPilotText() {
@@ -131,101 +135,9 @@ public class MainWindowViewModel extends Observable implements Observer {
 	}
 	
 	public void calculatePath() {
-		try {
-			Socket theServer = new Socket("127.0.0.1", 1111);
-			PrintWriter writer = new PrintWriter(theServer.getOutputStream());
-			BufferedReader reader = new BufferedReader(new InputStreamReader(theServer.getInputStream()));
-//			String[] mat = {"1,2", "1,2"};
-			
-			String[] newMat = new String[map.length];
-			
-			for (int i = 0; i < newMat.length; i++) {
-				newMat[i] = "";
-			}
-			
-			for (int i = 0; i < map.length; i ++) {
-				for (int j = 0; j < map[i].length; j++) {
-					if (j == map[i].length - 1) {
-						newMat[i] = newMat[i].concat((int)map[i][j] + "");
-					} else {
-						newMat[i] = newMat[i].concat((int)map[i][j] + ",");
-					}
-				}
-			}
-			
-			writer.println(map.length + "," + map[0].length);
-			
-			// Print the maze
-			for (String line : newMat) {
-				writer.println(line);
-			}
-			
-			writer.println("end");
-			
-			// Starting point in maze.
-			
-			// TODO: Delete this
-			srcY.set(map.length / 2);
-			srcX.set(map[0].length / 2);
-			destY.set(this.getDestY());
-			destX.set(this.getDestX());
-			writer.println(srcY.intValue() + "," + srcX.intValue());
-			
-			// Finish point in maze.
-			writer.println(destY.intValue() + "," + destX.intValue());
-			
-			writer.flush();
-			String responseLine;
-//			while((responseLine = reader.readLine()) != "end") {
-				responseLine = reader.readLine();
-				System.out.println("The response is");
-				System.out.println(responseLine);
-//			}
-			
-			System.out.println("The response is:" + responseLine);
-			int[] srcArr = {srcY.intValue(), srcX.intValue()};
-			int[] destArr = {destY.intValue(), destX.intValue()};
-			int[][] path = buildPathFromResponse(srcArr, destArr, responseLine);
-			this.mapView.paintPath(path);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		Thread t = new Thread();
-		try {
-			t.sleep(100);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public int[][] buildPathFromResponse(int[] src, int[] dest, String response) {
-		String[] path = response.split(",");
-		int [][] result = new int[path.length + 1][2];
-		
-		result[0] = src;
-		for (int i = 1; i <= path.length; i++) {
-			switch (path[i - 1]) {
-				case "Up":
-					result[i][0] = result[i - 1][0] - 1;
-					result[i][1] = result[i - 1][1];
-					break;
-				case "Down":
-					result[i][0] = result[i - 1][0] + 1;
-					result[i][1] = result[i - 1][1];
-					break;
-				case "Left":
-					result[i][0] = result[i - 1][0];
-					result[i][1] = result[i - 1][1] - 1;
-					break;
-				case "Right":
-					result[i][0] = result[i - 1][0];
-					result[i][1] = result[i - 1][1] + 1;
-					break;
-			}
-		}
-		
-		return result;
+		this.mapModel.calculateShortestPath();
+		int[][] path = this.mapModel.getPlanePath();
+		this.mapView.paintPath(path);
 	}
 	
 	// Getters & Setters
@@ -235,6 +147,7 @@ public class MainWindowViewModel extends Observable implements Observer {
 	
 	public void setMap(double[][] map) {
 		this.map = map;
+		this.mapModel.setHeightMap(map);
 	}
 	
 	public double[][] getMap() {
@@ -275,17 +188,39 @@ public class MainWindowViewModel extends Observable implements Observer {
 	
 	public void setDestX(double destX) {
 		this.destX.set(destX);
+		this.mapModel.setDest(new Point((int) destX, (int) this.destY.get()));
 	}
 	
 	public void setDestY(double destY) {
 		this.destY.set(destY);
+		this.mapModel.setDest(new Point((int)this.destX.get(), (int)destY));
 	}
 	
 	public void setSrcX(double srcX) {
 		this.srcX.set(srcX);
+		this.mapModel.setSrc(new Point((int) srcX, (int) this.srcY.get()));
 	}
 	
 	public void setSrcY(double srcY) {
 		this.srcY.set(srcY);
+		this.mapModel.setSrc(new Point((int)this.srcX.get(), (int)srcY));
+	}
+
+	public String getPathSolverIP() {
+		return pathSolverIP.get();
+	}
+
+	public void setPathSolverIP(String pathSolverIP) {
+		this.pathSolverIP.set(pathSolverIP);
+		this.mapModel.setServerIP(pathSolverIP);
+	}
+
+	public String getPathSolverPort() {
+		return pathSolverPort.get();
+	}
+
+	public void setPathSolverPort(String pathSolverPort) {
+		this.pathSolverPort.set(pathSolverPort);
+		this.mapModel.setServerPort(pathSolverPort);
 	}
 }
