@@ -21,6 +21,7 @@ public class Map extends Canvas {
 	// Data Members
 	private double[][] matrix;
 	private double maxVal;
+	private double minVal;
 	private MainWindowViewModel viewModel;
 	private double destX;
 	private double destY;
@@ -70,11 +71,14 @@ public class Map extends Canvas {
 		// Calculate the max value of the matrix.
 		calculateMaxValue();
 		
+		// Calculate the min value of the matrix.
+		calculateMinValue();
+		
 		for (int i = 0; i < matrix.length; i ++) {
 			for (int j = 0; j < matrix[i].length; j ++) {
 				
 				// Calculate the color.
-				color = calculateColor(matrix[i][j], this.maxVal);
+				color = calculateColor(matrix[i][j], this.maxVal, this.minVal);
 				
 				// Set the color
 				graphicsContext.setFill(color);
@@ -92,10 +96,10 @@ public class Map extends Canvas {
 		GraphicsContext graphicsContext = getGraphicsContext2D();
 		
 		// Calculate a square's height
-				double sqrHeight = getHeight() / this.matrix.length;
+		double sqrHeight = getHeight() / this.matrix.length;
 						
-				// Calculate a square's width
-				double sqrWidth = getWidth() / this.matrix[0].length;
+		// Calculate a square's width
+		double sqrWidth = getWidth() / this.matrix[0].length;
 		
 		for (int i = 0; i < path.length; i++) {
 			graphicsContext.setFill(Color.WHITE);
@@ -104,9 +108,9 @@ public class Map extends Canvas {
 		
 	}
 	
-	private Color calculateColor(double val, double max) {
+	private Color calculateColor(double val, double max, double min) {
 		int red, green, blue;
-		double percent = (val / max) * 100;
+		double percent = ((val - min) / (max - min)) * 100;
 		
 		if (val == max) {
 			red = 255;
@@ -125,7 +129,10 @@ public class Map extends Canvas {
 		return Color.rgb(red, green, blue);
 	}
 	
-	private void calculateMaxValue( ) {
+	private void calculateMaxValue() {
+		
+		// Set the initial value.
+		this.maxVal = matrix[0][0];
 		
 		// Go through the whole matrix and find the max value.
 		for (int i = 0; i < matrix.length; i ++) {
@@ -135,6 +142,21 @@ public class Map extends Canvas {
 				}
 			}
 		}
+	}
+	
+	private void calculateMinValue() {
+		
+		// Set the initial value.
+		this.minVal = matrix[0][0];
+		
+		// Go through the whole matrix and find the max value.
+				for (int i = 0; i < matrix.length; i ++) {
+					for (int j = 0; j < matrix[i].length; j ++) {
+						if (matrix[i][j] < this.minVal) {
+							this.minVal = matrix[i][j];
+						}
+					}
+				}
 	}
 	
 	// Getters & Setters
