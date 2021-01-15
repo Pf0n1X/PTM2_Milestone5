@@ -167,7 +167,10 @@ public class MainWindowController implements Observer {
 		return chosen;
 	}
 
-	
+	public void setRunningVars() {
+		this.airspeed.textProperty().bind(this.ViewModel.getStringProperties().get(MainWindowViewModel.AIRSPEED));
+		this.altitude.textProperty().bind(this.ViewModel.getStringProperties().get(MainWindowViewModel.ALT));
+	}
 	public void clearAttributesLabels() {
 		this.airspeed.textProperty().unbind();
 		this.altitude.textProperty().unbind();
@@ -187,6 +190,7 @@ public class MainWindowController implements Observer {
 		if(this.radioBtnManual.isSelected()) {
 			this.radioBtnManual.setSelected(false);	
 			this.clearAttributesLabels();
+			this.setRunningVars();
 		}
 		this.radioBtnAutopilot.setSelected(true);
 		this.statlabel.setText("AutoPilot mode is ON");
@@ -206,30 +210,69 @@ public class MainWindowController implements Observer {
 		} else this.statlabel.setText(MCL);
 	}
 	public void runCodeCommands() {
+		if(this.radioBtnAutopilot.isSelected()) {
+			String line = this.txtCommands.getText();
+			this.ViewModel.autoPilotText.setValue(line);
+			this.ViewModel.getAutoPilotText();
+		} else this.statlabel.setText(APL);
+	}
+	
+	public void onRudderDrag(MouseEvent event) {
+		if(this.radioBtnManual.isSelected()) {
+			this.ViewModel.rudderChanged();
+		}
+		else {
+			this.sRudder.setValue(0.0);
+		}
 		
 	}
 	
-	public void onRudderDrag() {
-		
-	}
-	
-	public void onThrottleDrag() {
+	public void onThrottleDrag(MouseEvent event) {
+		if(this.radioBtnManual.isSelected()) {
+			this.ViewModel.throttleChanged();
+		}
+		else {
+			this.sThrottle.setValue(0.0);
+		}
 		
 	}
 	
 	public void onRudderRelease() {
+		if(this.radioBtnManual.isSelected()) {
+			this.statlabel.setText("Rudder is set to = " + this.sThrottle.getValue());
+		} else {
+			this.statlabel.setText(MCL);
+		}
 		
 	}
 	
-	public void onThrottleRelease() {
+	public void onThrottleRelease(MouseEvent event) {
+		if(this.radioBtnManual.isSelected()) {
+			System.out.println("Throttle is set to = " + this.sThrottle.getValue());
+		}else {
+			this.statlabel.setText(MCL);
+		}
 		
 	}
 	
-	public void onJoystickRelease() {
-		
+	public void onJoystickRelease(MouseEvent event) {
+		circleJoystick.setCenterX(0);
+		circleJoystick.setCenterY(0);	
 	}
 	
-	public void onJoystickDrag() {
+	public void onJoystickDrag(MouseEvent event) {
+		if(this.radioBtnManual.isSelected()) {
+			if (event.getX() <= 100 && event.getX() >= -100)
+				if (event.getY() <= 100 && event.getY() >= -100) {
+					circleJoystick.setCenterX(event.getX());
+					circleJoystick.setCenterY(event.getY());
+					statlabel.setText("(Alieron = " + event.getX()/100 + " Elevator = " + event.getY()/100 + ")");
+					this.elevatorVal.set(event.getY()/-100);
+					this.alieronVal.set(event.getX()/100);
+					this.ViewModel.elevatorChanged();
+					this.ViewModel.aileronChanged();
+				}
+		} else this.statlabel.setText(MCL);
 		
 	}
 }

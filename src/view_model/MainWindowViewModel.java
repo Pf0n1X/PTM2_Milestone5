@@ -36,6 +36,22 @@ public class MainWindowViewModel extends Observable implements Observer {
 	public DoubleProperty throttle, rudder, alieron, elevator, flaps;
 	private volatile boolean isConnected = false;
 	private HashMap<String, StringProperty> stringProperties;
+	public HashMap<String, StringProperty> getStringProperties() {
+		return stringProperties;
+	}
+
+	public void setStringProperties(HashMap<String, StringProperty> stringProperties) {
+		this.stringProperties = stringProperties;
+	}
+
+	public HashMap<String, DoubleProperty> getDoubleProperties() {
+		return doubleProperties;
+	}
+
+	public void setDoubleProperties(HashMap<String, DoubleProperty> doubleProperties) {
+		this.doubleProperties = doubleProperties;
+	}
+
 	private HashMap<String, DoubleProperty> doubleProperties;
 	private MainWindowController mainWindowController;
 	private Map mapView;
