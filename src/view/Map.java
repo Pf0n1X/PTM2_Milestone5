@@ -239,6 +239,7 @@ public class Map extends Canvas {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
 
 	public void setDestination(double x, double y) {
