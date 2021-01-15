@@ -73,7 +73,7 @@
             <RadioButton fx:id="radioBtnManual" layoutX="90.0" layoutY="4.0" mnemonicParsing="false" onAction="#toggleManualPilot" prefHeight="17.0" prefWidth="118.0" text="Manual Contorls" textAlignment="CENTER" />
             <Slider fx:id="sRudder" layoutX="56.0" layoutY="277.0" max="1.0" min="-1.0" onMouseDragged="#onRudderDrag" onMouseReleased="#onRudderRelease" prefHeight="16.0" prefWidth="200.0" />
             <Slider fx:id="sThrottle" layoutX="27.0" layoutY="63.0" max="1.0" onMouseDragged="#onThrottleDrag" onMouseReleased="#onThrottleRelease" orientation="VERTICAL" prefHeight="190.0" prefWidth="16.0" />
-            <Circle fx:id="circleJoystickBorder" fill="#babfc3" layoutX="153.0" layoutY="161.0" radius="100.0" stroke="BLACK" strokeType="INSIDE">
+            <Circle fx:id="circleJoystickBorder" fill="#babfc3" layoutX="153.0" layoutY="161.0" radius="100.0" stroke="BLACK"  onMouseDragged="#onJoystickDrag" onMouseReleased="#onJoystickRelease" strokeType="INSIDE">
                <effect>
                   <DropShadow radius="20.377499999999998" width="62.51" />
                </effect></Circle>
