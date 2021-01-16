@@ -9,6 +9,8 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
+
+import commands.ConnectCommand;
 import interpreter.Interpreter;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -155,7 +157,7 @@ public class MainWindowViewModel extends Observable implements Observer {
 		this.interpreter.getSimulatorSymbolTable().put("/instrumentation/altimeter/indicated-altitude-ft", new SimulatorSymbolVariable("/instrumentation/altimeter/indicated-altitude-ft", 0.0));
 		this.interpreter.getSimulatorSymbolTable().put("simX", new SimulatorSymbolVariable("simX", 0.0));
 		this.interpreter.getSimulatorSymbolTable().put("simY", new SimulatorSymbolVariable("simY", 0.0));
-		this.interpreter.getSimulatorSymbolTable().put("simZ", new SimulatorSymbolVariable("simZ", 0.0));	
+		this.interpreter.getSimulatorSymbolTable().put("simZ", new SimulatorSymbolVariable("simZ", 0.0));
 	}
 	
 	public void changeRadioButtonExec(String action) {
@@ -172,6 +174,8 @@ public class MainWindowViewModel extends Observable implements Observer {
 	public void setConnected(boolean isConnected) {
 		this.isConnected = isConnected;
 		this.startTimerVals();
+		Double lat = ConnectCommand.get("get /position/latitude-deg");
+		System.out.println(lat + "");
 	}
 	
 	public void calculatePath() {
