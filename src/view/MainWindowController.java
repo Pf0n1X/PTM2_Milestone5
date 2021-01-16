@@ -181,6 +181,8 @@ public class MainWindowController implements Observer {
 	public void toggleManualPilot(){
 		if(this.radioBtnAutopilot.isSelected()) {
 			this.radioBtnAutopilot.setSelected(false);
+			this.ViewModel.changeRadioButtonExec("Manual");
+			this.setRunningVars();
 		}
 		this.radioBtnManual.setSelected(true);
 		this.statlabel.setText("Manual Controls Are ON");
@@ -190,7 +192,7 @@ public class MainWindowController implements Observer {
 		if(this.radioBtnManual.isSelected()) {
 			this.radioBtnManual.setSelected(false);	
 			this.clearAttributesLabels();
-			this.setRunningVars();
+			this.ViewModel.changeRadioButtonExec("Autopilot");
 		}
 		this.radioBtnAutopilot.setSelected(true);
 		this.statlabel.setText("AutoPilot mode is ON");

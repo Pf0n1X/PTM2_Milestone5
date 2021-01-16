@@ -140,6 +140,30 @@ public class MainWindowViewModel extends Observable implements Observer {
 	public boolean isConnected() {
 		return isConnected;
 	}
+	
+	public void putSymbolsInSymbolTable () {
+		
+		this.interpreter.getSimulatorSymbolTable().put("/controls/flight/speedbrake", new SimulatorSymbolVariable("/controls/flight/speedbrake", 0.0));
+		this.interpreter.getSimulatorSymbolTable().put("/controls/engines/current-engine/throttle", new SimulatorSymbolVariable("/controls/engines/current-engine/throttle", 0.0));
+		this.interpreter.getSimulatorSymbolTable().put("/instrumentation/heading-indicator/offset-deg", new SimulatorSymbolVariable("/instrumentation/heading-indicator/offset-deg", 0.0));
+		this.interpreter.getSimulatorSymbolTable().put("/instrumentation/airspeed-indicator/indicated-speed-kt", new SimulatorSymbolVariable("/instrumentation/airspeed-indicator/indicated-speed-kt", 0.0));
+		this.interpreter.getSimulatorSymbolTable().put("/instrumentation/attitude-indicator/indicated-roll-deg", new SimulatorSymbolVariable("/instrumentation/attitude-indicator/indicated-roll-deg", 0.0));
+		this.interpreter.getSimulatorSymbolTable().put("/instrumentation/attitude-indicator/internal-pitch-deg", new SimulatorSymbolVariable("/instrumentation/attitude-indicator/internal-pitch-deg", 0.0));
+		this.interpreter.getSimulatorSymbolTable().put("/controls/flight/rudder", new SimulatorSymbolVariable("/controls/flight/rudder", 0.0));
+		this.interpreter.getSimulatorSymbolTable().put("/controls/flight/aileron", new SimulatorSymbolVariable("/controls/flight/aileron", 0.0));
+		this.interpreter.getSimulatorSymbolTable().put("/controls/flight/elevator", new SimulatorSymbolVariable("/controls/flight/elevator", 0.0));
+		this.interpreter.getSimulatorSymbolTable().put("/instrumentation/altimeter/indicated-altitude-ft", new SimulatorSymbolVariable("/instrumentation/altimeter/indicated-altitude-ft", 0.0));
+		this.interpreter.getSimulatorSymbolTable().put("simX", new SimulatorSymbolVariable("simX", 0.0));
+		this.interpreter.getSimulatorSymbolTable().put("simY", new SimulatorSymbolVariable("simY", 0.0));
+		this.interpreter.getSimulatorSymbolTable().put("simZ", new SimulatorSymbolVariable("simZ", 0.0));	
+	}
+	
+	public void changeRadioButtonExec(String action) {
+		this.interpreter.reset();
+		if (action == "Manual") {
+			putSymbolsInSymbolTable();
+		}
+	}
 
 	public void startTimerVals() {
 		

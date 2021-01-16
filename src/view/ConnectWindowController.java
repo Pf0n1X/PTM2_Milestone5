@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import math_expressions.SimulatorSymbolVariable;
 import view_model.MainWindowViewModel;
 
 public class ConnectWindowController implements Observer  {
@@ -53,12 +54,14 @@ public class ConnectWindowController implements Observer  {
 		}
 		
 	}
-	
+
 	
 	private boolean connect(String ip, int telnetPort) {
 		this.ip = ip;
 		this.port = telnetPort;
 		if(this.viewModel != null) {
+			
+			this.viewModel.putSymbolsInSymbolTable();
 			
 //		    Set the rate to 4 and the port to * TODO *
 			this.viewModel.sendCommandToInterpreter("openDataServer " + 5400 + " " + 10);
