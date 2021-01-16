@@ -11,3 +11,8 @@ Main.class
 /1046241196
 /1742762400
 /1876472015
+
+# Eclipse
+.classpath
+.project
+.settings/
