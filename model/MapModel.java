@@ -7,6 +7,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import commands.ConnectCommand;
+import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.util.Duration;
+import view_model.MainWindowViewModel;
 
 public class MapModel {
 	
@@ -15,12 +26,15 @@ public class MapModel {
 	private double[][] heightMap;
 	private Point src;
 	private Point dest;
+	private Point zeroLocation;
 	private String serverPort;
 	private String serverIP;
+	private double simKMPerBlock;
+	public MainWindowViewModel viewModel;
 	
 	// Constructors
-	public MapModel() {
-		
+	public MapModel(MainWindowViewModel viewModel) {
+		this.viewModel = viewModel;
 	}
 	
 	// Methods
@@ -57,8 +71,13 @@ public class MapModel {
 			writer.println("end");
 			
 			// Starting point in maze.
-			this.setSrc(new Point(this.heightMap[0].length / 2, this.heightMap[0].length / 2));
+//			this.setSrc(new Point(this.heightMap[0].length / 2, this.heightMap[0].length / 2));
 			writer.println((int) src.getY() + "," + (int) src.getX());
+			
+			System.out.println("shortest path");
+			System.out.println((int) src.getY() + "," + (int) src.getX());
+			System.out.println((int) dest.getY() + "," + (int) dest.getX());
+			
 			
 			// Finish point in maze.
 			writer.println((int) dest.getY() + "," + (int) dest.getX());
@@ -91,20 +110,20 @@ public class MapModel {
 		for (int i = 1; i <= path.length; i++) {
 			switch (path[i - 1]) {
 				case "Up":
-					result[i][0] = result[i - 1][0] - 1;
-					result[i][1] = result[i - 1][1];
-					break;
-				case "Down":
-					result[i][0] = result[i - 1][0] + 1;
-					result[i][1] = result[i - 1][1];
-					break;
-				case "Left":
 					result[i][0] = result[i - 1][0];
 					result[i][1] = result[i - 1][1] - 1;
 					break;
-				case "Right":
+				case "Down":
 					result[i][0] = result[i - 1][0];
 					result[i][1] = result[i - 1][1] + 1;
+					break;
+				case "Left":
+					result[i][0] = result[i - 1][0] - 1;
+					result[i][1] = result[i - 1][1];
+					break;
+				case "Right":
+					result[i][0] = result[i - 1][0] + 1;
+					result[i][1] = result[i - 1][1];
 					break;
 			}
 		}
@@ -163,5 +182,83 @@ public class MapModel {
 
 	public void setServerIP(String serverIP) {
 		this.serverIP = serverIP;
+	}
+
+	public void setSimKMPerBlock(double simKMPerBlock) {
+		this.simKMPerBlock = simKMPerBlock;
+	}
+	
+	public double getSimKMPerBlock() {
+		return this.simKMPerBlock;
+	}
+	
+	public void runLocationRetrieval() {
+		Timeline fourSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(4),
+				new EventHandler<ActionEvent>() {
+
+					@Override
+					public void handle(ActionEvent arg0) {
+						double lon = ConnectCommand.get("get /position/longitude-deg");
+						double lat = ConnectCommand.get("get /position/latitude-deg");
+//						System.out.println("Test");
+//						System.out.println(lon);
+						System.out.println("Test");
+						System.out.println(simKMPerBlock);
+						System.out.println((lon - zeroLocation.x) / simKMPerBlock);
+						System.out.println((lat - zeroLocation.y) / simKMPerBlock);
+						setSrc(new Point((int)((lon - zeroLocation.x) / simKMPerBlock), (int)((lat - zeroLocation.y) / simKMPerBlock)));
+						viewModel.srcX.set((lon - zeroLocation.x) / simKMPerBlock);
+						viewModel.srcY.set((lat - zeroLocation.y) / simKMPerBlock);
+						viewModel.notifySourceChanged();
+					}			
+		}));
+		
+		fourSecondsWonder.setCycleCount(Timeline.INDEFINITE);
+		fourSecondsWonder.play();
+//		AnimationTimer animTimer = new AnimationTimer() {
+//			long lastUpdate = 0;
+//			
+//			@Override
+//			public void handle(long now) {
+//		    	double lon = ConnectCommand.get("get /position/longitude-deg");
+//				double lat = ConnectCommand.get("get /position/latitude-deg");
+////				System.out.println("Test");
+////				System.out.println(lon);
+////				System.out.println(lat);
+////				System.out.println((lon - zeroLocation.x) / simKMPerBlock);
+////				System.out.println((lat - zeroLocation.y) / simKMPerBlock);
+//				setSrc(new Point((int)((lon - zeroLocation.x) / simKMPerBlock), (int)((lat - zeroLocation.y) / simKMPerBlock)));
+//				viewModel.srcX.set((lon - zeroLocation.x) / simKMPerBlock);
+//				viewModel.srcY.set((lon - zeroLocation.y) / simKMPerBlock);
+//				viewModel.notifySourceChanged();
+//				
+//			}
+//		};
+//		Timer t = new Timer( );
+//		t.scheduleAtFixedRate(new TimerTask() {
+//
+//		    @Override
+//		    public void run() {
+//		    	double lon = ConnectCommand.get("get /position/longitude-deg");
+//				double lat = ConnectCommand.get("get /position/latitude-deg");
+////				System.out.println("Test");
+////				System.out.println(lon);
+////				System.out.println(lat);
+////				System.out.println((lon - zeroLocation.x) / simKMPerBlock);
+////				System.out.println((lat - zeroLocation.y) / simKMPerBlock);
+//				setSrc(new Point((int)((lon - zeroLocation.x) / simKMPerBlock), (int)((lat - zeroLocation.y) / simKMPerBlock)));
+//				viewModel.srcX.set((lon - zeroLocation.x) / simKMPerBlock);
+//				viewModel.srcY.set((lon - zeroLocation.y) / simKMPerBlock);
+//				viewModel.notifySourceChanged();
+//		    }
+//		}, 0, 30000);
+	}
+
+	public void setZeroLocation(Point point) {
+		this.zeroLocation = point;
+	}
+	
+	public Point getZeroLocation() {
+		return this.zeroLocation;
 	}
 }

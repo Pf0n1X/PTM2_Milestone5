@@ -25,10 +25,12 @@ public class MainWindowViewModel extends Observable implements Observer {
 
 	// Data Members
 	private double[][] map;
-	private DoubleProperty srcX;
-	private DoubleProperty srcY;
+	public DoubleProperty srcX;
+	public DoubleProperty srcY;
 	private DoubleProperty destX;
 	private DoubleProperty destY;
+	private DoubleProperty zeroLocationX;
+	private DoubleProperty zeroLocationY;
 	private StringProperty pathSolverIP;
 	private StringProperty pathSolverPort;
 	private Interpreter interpreter;
@@ -36,6 +38,7 @@ public class MainWindowViewModel extends Observable implements Observer {
 	public StringProperty clientPort;
 	public StringProperty autoPilotText;
 	public DoubleProperty throttle, rudder, alieron, elevator, flaps;
+	public DoubleProperty SimKMPerBlock;
 	private volatile boolean isConnected = false;
 	private HashMap<String, StringProperty> stringProperties;
 	public HashMap<String, StringProperty> getStringProperties() {
@@ -83,6 +86,9 @@ public class MainWindowViewModel extends Observable implements Observer {
 		this.srcY = new SimpleDoubleProperty();
 		this.destX = new SimpleDoubleProperty();
 		this.destY = new SimpleDoubleProperty();
+		this.SimKMPerBlock = new SimpleDoubleProperty();
+		this.zeroLocationX = new SimpleDoubleProperty();
+		this.zeroLocationY = new SimpleDoubleProperty();
 		
 		this.stringProperties= new HashMap<String, StringProperty>();
 		this.doubleProperties= new HashMap<String, DoubleProperty>();
@@ -91,7 +97,7 @@ public class MainWindowViewModel extends Observable implements Observer {
 		this.stringProperties.put(ALT, new SimpleStringProperty());
 		this.doubleProperties.put(LATITUDE, new SimpleDoubleProperty());
 		this.doubleProperties.put(LONGITUDE, new SimpleDoubleProperty());
-		this.mapModel = new MapModel();
+		this.mapModel = new MapModel(this);
 	}
 
 	public void getAutoPilotText() {
@@ -171,17 +177,29 @@ public class MainWindowViewModel extends Observable implements Observer {
 		
 	}
 	
+	public Double getSimKMPerBlock() {
+		return SimKMPerBlock.get();
+	}
+
+	public void setSimKMPerBlock(double simKMPerBlock) {
+		SimKMPerBlock.set(simKMPerBlock);
+		this.mapModel.setSimKMPerBlock(simKMPerBlock);
+	}
+
 	public void setConnected(boolean isConnected) {
 		this.isConnected = isConnected;
 		this.startTimerVals();
-		Double lat = ConnectCommand.get("get /position/latitude-deg");
-		System.out.println(lat + "");
+		this.mapModel.runLocationRetrieval();
+//		Double lat = ConnectCommand.get("get /position/latitude-deg");
+//		System.out.println(lat + "");
 	}
 	
 	public void calculatePath() {
 		this.mapModel.calculateShortestPath();
 		int[][] path = this.mapModel.getPlanePath();
-		this.mapView.paintPath(path);
+		this.mapView.setPath(path);
+//		this.mapView.setPath(path);
+//		this.mapView.paintAll();
 	}
 	
 	// Getters & Setters
@@ -243,11 +261,13 @@ public class MainWindowViewModel extends Observable implements Observer {
 	public void setSrcX(double srcX) {
 		this.srcX.set(srcX);
 		this.mapModel.setSrc(new Point((int) srcX, (int) this.srcY.get()));
+		this.mapView.setSrcX(srcX);;
 	}
 	
 	public void setSrcY(double srcY) {
 		this.srcY.set(srcY);
 		this.mapModel.setSrc(new Point((int)this.srcX.get(), (int)srcY));
+		this.mapView.setSrcY(srcY);
 	}
 
 	public String getPathSolverIP() {
@@ -266,5 +286,21 @@ public class MainWindowViewModel extends Observable implements Observer {
 	public void setPathSolverPort(String pathSolverPort) {
 		this.pathSolverPort.set(pathSolverPort);
 		this.mapModel.setServerPort(pathSolverPort);
+	}
+
+	public void setZeroLocationX(double zeroLocationX) {
+		this.zeroLocationX.set(zeroLocationX);
+		this.mapModel.setZeroLocation(new Point((int) zeroLocationX, (int) this.zeroLocationY.get()));
+	}
+	
+	public void setZeroLocationY(double zeroLocationY) {
+		this.zeroLocationY.set(zeroLocationY);
+		this.mapModel.setZeroLocation(new Point((int)this.zeroLocationX.get(), (int)zeroLocationY));
+	}
+
+	public void notifySourceChanged() {
+		this.mapView.setSrcX(getSrcX());
+		this.mapView.setSrcY(getSrcY());
+		this.mapView.paintAll();
 	}
 }

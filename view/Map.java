@@ -25,11 +25,14 @@ public class Map extends Canvas {
 	private MainWindowViewModel viewModel;
 	private double destX;
 	private double destY;
+	private double srcX;
+	private double srcY;
 	private File csv;
 	private double ctrlWidth;
 	private double ctrlHeight;
 	double sqrHeight;
 	double sqrWidth;
+	private int[][] path;
 	
 	// Constant Members
 	private static final int MARKER_SIZE = 15;
@@ -37,18 +40,15 @@ public class Map extends Canvas {
 	// Constructors
 	public Map() {
 		this.maxVal = 0;
+		this.path = new int[0][];
 	}
 	
 	// Methods
-	public void paintMap(File csv) {
-		
-		this.setCsv(csv);
-		
-		getArrayFromFile(csv);
+	public void paintMap() {
 		
 		// TODO: Delete this
-		this.viewModel.setSrcX(this.matrix[0].length);
-		this.viewModel.setSrcY(this.matrix.length);
+//		this.viewModel.setSrcX(this.matrix[0].length);
+//		this.viewModel.setSrcY(this.matrix.length);
 		
 		GraphicsContext graphicsContext = getGraphicsContext2D();
 		Color color;
@@ -59,8 +59,8 @@ public class Map extends Canvas {
 		// Get the map contro's height.
 		this.ctrlHeight = getHeight();
 		
-		// Clear the block.
-		graphicsContext.clearRect(0, 0, ctrlWidth, ctrlHeight);
+//		// Clear the block.
+//		graphicsContext.clearRect(0, 0, ctrlWidth, ctrlHeight);
 		
 		// Calculate a square's height
 		this.sqrHeight = ctrlHeight / this.matrix.length;
@@ -92,7 +92,7 @@ public class Map extends Canvas {
 		}
 	}
 	
-	public void paintPath(int[][] path) {
+	public void paintPath() {
 		GraphicsContext graphicsContext = getGraphicsContext2D();
 		
 		// Calculate a square's height
@@ -100,12 +100,12 @@ public class Map extends Canvas {
 						
 		// Calculate a square's width
 		double sqrWidth = getWidth() / this.matrix[0].length;
-		
-		for (int i = 0; i < path.length; i++) {
-			graphicsContext.setFill(Color.WHITE);
-			graphicsContext.fillOval(sqrWidth * path[i][1], sqrHeight * path[i][0], 2.5, 2.5);
+		if (path != null) {
+			for (int i = 0; i < path.length; i++) {
+				graphicsContext.setFill(Color.WHITE);
+				graphicsContext.fillOval(sqrWidth * path[i][0], sqrHeight * path[i][1], 2.5, 2.5);
+			}
 		}
-		
 	}
 	
 	private Color calculateColor(double val, double max, double min) {
@@ -166,6 +166,22 @@ public class Map extends Canvas {
 
 	public double getCtrlWidth() {
 		return ctrlWidth;
+	}
+	
+	public double getSrcX() {
+		return srcX;
+	}
+
+	public void setSrcX(double srcX) {
+		this.srcX = srcX;
+	}
+
+	public double getSrcY() {
+		return srcY;
+	}
+
+	public void setSrcY(double srcY) {
+		this.srcY = srcY;
 	}
 
 	public void setCtrlWidth(double ctrlWidth) {
@@ -230,6 +246,7 @@ public class Map extends Canvas {
 
 	public void setCsv(File csv) {
 		this.csv = csv;
+		getArrayFromFile(csv);
 	}
 
 	// Methods
@@ -238,8 +255,15 @@ public class Map extends Canvas {
 			Scanner scanner = new Scanner(file);
 			scanner.useDelimiter("\r\n");
 			
-			scanner.next();
-			scanner.next();
+			double[] zeroLocation = Arrays.asList(scanner.next().split(",")).stream().mapToDouble(cell -> Double.parseDouble(cell)).toArray();
+			double kmPerBlock = Arrays.asList(scanner.next().split(",")).stream().mapToDouble(cell -> Double.parseDouble(cell)).toArray()[0];
+			
+//			System.out.println("Map content");
+//			System.out.println(src[0] + "," + src[1]);
+//			System.out.println(kmPerBlock);
+			this.viewModel.setZeroLocationX(zeroLocation[0]);
+			this.viewModel.setZeroLocationY(zeroLocation[1]);
+			this.viewModel.setSimKMPerBlock(kmPerBlock);
 			LinkedList<String> lines = new LinkedList<String>();
 			
 			while(scanner.hasNext()) {
@@ -252,7 +276,7 @@ public class Map extends Canvas {
 				String line = lines.get(i);
 				double[] lineCells = Arrays.asList(line.split(",")).stream().mapToDouble(cell -> Double.parseDouble(cell)).toArray();
 				this.matrix[i] = lineCells;
-				System.out.println(lineCells.toString());
+//				System.out.println(lineCells.toString());
 			}
 			
 			this.viewModel.setMap(this.matrix);
@@ -269,12 +293,14 @@ public class Map extends Canvas {
 		this.destY = y;
 		this.viewModel.setDestX(x / this.sqrWidth);
 		this.viewModel.setDestY(y / this.sqrHeight);
-		paintMap(this.csv);
+		this.setCsv(csv);
+		getArrayFromFile(csv);
+		paintMap();
 		paintDestination();
 	}
 	
 	private void paintDestination() {
-		GraphicsContext graphics = getGraphicsContext2D();
+//		GraphicsContext graphics = getGraphicsContext2D();
 		try {
 //			System.out.println("Painting image at " + destY + " and " + destX);
 //			graphics.drawImage(new Image(new FileInputStream("./resources/destination.png")), destY, destX);
@@ -288,5 +314,51 @@ public class Map extends Canvas {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	private void paintSource() {
+//		GraphicsContext graphics = getGraphicsContext2D();
+		try {
+//			System.out.println("Painting image at " + destY + " and " + destX);
+//			graphics.drawImage(new Image(new FileInputStream("./resources/destination.png")), destY, destX);
+			
+			System.out.println("painting source");
+			System.out.println(this.srcX);
+			System.out.println(this.srcY);
+			GraphicsContext gc = getGraphicsContext2D();
+			System.out.println("TT");
+			System.out.println(getWidth());
+			System.out.println(sqrWidth  * srcX);
+			System.out.println(getHeight());
+			System.out.println(sqrHeight * srcY);
+			gc.drawImage(new Image(new FileInputStream("./resources/destination.png")), 
+					sqrWidth * srcX,
+					sqrHeight * srcY,
+					MARKER_SIZE, 
+					MARKER_SIZE);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void paintAll() {
+		getGraphicsContext2D().clearRect(0, 0, getWidth(), getHeight());
+		System.out.println("Painting map");
+		paintMap();
+		System.out.println("Painting path");
+		paintPath();
+		System.out.println("Painting source");
+		paintSource();
+		System.out.println("Painting destination");
+		paintDestination();
+	}
+
+	public void setPath(int[][] path) {
+		this.path = path;
+	}
+	
+	public int[][] getPath() {
+		return this.getPath();
 	}
 }

@@ -113,9 +113,10 @@ public class MainWindowController implements Observer {
 	
 	public void loadData() {
 		this.csv = fileLoader();
-		if (this.csv != null)
-			this.map.paintMap(this.csv);
-		
+		if (this.csv != null) {
+			this.map.setCsv(this.csv);
+			this.map.paintMap();
+		}
 	}
 	
 	public void onCalculatePathButtonPressed() {
