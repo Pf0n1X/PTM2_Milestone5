@@ -198,17 +198,20 @@ public class MapModel {
 
 					@Override
 					public void handle(ActionEvent arg0) {
+//						ConnectCommand.get("dump /position");
+						
 						double lon = ConnectCommand.get("get /position/longitude-deg");
 						double lat = ConnectCommand.get("get /position/latitude-deg");
-//						System.out.println("Test");
+//						System.out.println("Test1");
 //						System.out.println(lon);
-						System.out.println("Test");
-						System.out.println(simKMPerBlock);
-						System.out.println((lon - zeroLocation.x) / simKMPerBlock);
-						System.out.println((lat - zeroLocation.y) / simKMPerBlock);
-						setSrc(new Point((int)((lon - zeroLocation.x) / simKMPerBlock), (int)((lat - zeroLocation.y) / simKMPerBlock)));
-						viewModel.srcX.set((lon - zeroLocation.x) / simKMPerBlock);
-						viewModel.srcY.set((lat - zeroLocation.y) / simKMPerBlock);
+//						System.out.println(lat);
+//						System.out.println("Test");
+//						System.out.println(simKMPerBlock);
+//						System.out.println((lon - zeroLocation.x) / simKMPerBlock);
+//						System.out.println((lat - zeroLocation.y) / simKMPerBlock);
+						setSrc(new Point((int)((lon - zeroLocation.x) * simKMPerBlock), (int)((lat - zeroLocation.y) * simKMPerBlock)));
+						viewModel.srcX.set((lon - zeroLocation.x) * simKMPerBlock);
+						viewModel.srcY.set((lat - zeroLocation.y) * simKMPerBlock);
 						viewModel.notifySourceChanged();
 					}			
 		}));

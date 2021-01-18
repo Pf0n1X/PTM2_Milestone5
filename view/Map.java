@@ -331,7 +331,7 @@ public class Map extends Canvas {
 			System.out.println(sqrWidth  * srcX);
 			System.out.println(getHeight());
 			System.out.println(sqrHeight * srcY);
-			gc.drawImage(new Image(new FileInputStream("./resources/destination.png")), 
+			gc.drawImage(new Image(new FileInputStream("./resources/source.png")), 
 					sqrWidth * srcX,
 					sqrHeight * srcY,
 					MARKER_SIZE, 
