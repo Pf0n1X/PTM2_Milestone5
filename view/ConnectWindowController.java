@@ -60,6 +60,7 @@ public class ConnectWindowController implements Observer  {
 		this.ip = ip;
 		this.port = telnetPort;
 		if(this.viewModel != null) {
+			this.viewModel.resetInterpreter();
 			
 			this.viewModel.putSymbolsInSymbolTable();
 			

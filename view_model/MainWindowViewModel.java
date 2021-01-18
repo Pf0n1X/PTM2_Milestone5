@@ -168,9 +168,7 @@ public class MainWindowViewModel extends Observable implements Observer {
 	
 	public void changeRadioButtonExec(String action) {
 		this.interpreter.reset();
-		if (action == "Manual") {
 			putSymbolsInSymbolTable();
-		}
 	}
 
 	public void startTimerVals() {
@@ -302,5 +300,9 @@ public class MainWindowViewModel extends Observable implements Observer {
 		this.mapView.setSrcX(getSrcX());
 		this.mapView.setSrcY(getSrcY());
 		this.mapView.paintAll();
+	}
+	
+	public void resetInterpreter() {
+		this.interpreter.reset();
 	}
 }
