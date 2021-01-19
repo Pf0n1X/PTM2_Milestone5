@@ -62,13 +62,13 @@ public class ConnectWindowController implements Observer  {
 		if(this.viewModel != null) {
 			this.viewModel.resetInterpreter();
 			
-			this.viewModel.putSymbolsInSymbolTable();
-			
 //		    Set the rate to 4 and the port to * TODO *
 			this.viewModel.sendCommandToInterpreter("openDataServer " + 5400 + " " + 10);
+			this.viewModel.sendCommandToInterpreter("connect "+ ip + " " + telnetPort);
+			this.viewModel.putSymbolsInSymbolTable();
 			
 //			Set the ip and port as the user has entered
-			this.viewModel.sendCommandToInterpreter("connect "+ ip + " " + telnetPort);
+
 			this.viewModel.sendCommandToInterpreter("var throttle = bind \"/controls/engines/current-engine/throttle\"");
 			this.viewModel.sendCommandToInterpreter("var rudder = bind \"/controls/flight/rudder\"");
 			this.viewModel.sendCommandToInterpreter("var aileron = bind \"/controls/flight/aileron\"");

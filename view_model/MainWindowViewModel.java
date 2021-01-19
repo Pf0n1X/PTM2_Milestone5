@@ -102,7 +102,16 @@ public class MainWindowViewModel extends Observable implements Observer {
 
 	public void getAutoPilotText() {
 		String[] lines = this.autoPilotText.getValue().split("\n");
-		interpreter.interpret(lines);
+		
+		Thread thread = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				interpreter.interpret(lines);
+			}
+		});
+		
+		thread.start();
 	}
 	 
 	// Methods
